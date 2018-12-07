@@ -5,6 +5,7 @@ import com.pinyougou.pojo.TbSeller;
 import com.pinyougou.sellergoods.service.SellerService;
 import com.pinyougou.vo.PageResult;
 import com.pinyougou.vo.Result;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,19 +28,30 @@ public class SellerController {
         return sellerService.findPage(page, rows);
     }
 
+
+    /**
+     * 保存商家信息
+     * @param seller 商家
+     * @return 操作结果
+     */
     @PostMapping("/add")
     public Result add(@RequestBody TbSeller seller) {
         try {
+            seller.setStatus("0");//未审核
+           //密码加密
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            seller.setPassword(passwordEncoder.encode(seller.getPassword()));
+            System.out.println("======================" + seller.toString());
             sellerService.add(seller);
-            return Result.ok("增加成功");
+            return Result.ok("商家注册成功");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return Result.fail("增加失败");
+        return Result.fail("商家注册失败");
     }
 
     @GetMapping("/findOne")
-    public TbSeller findOne(Long id) {
+    public TbSeller findOne(String id) {
         return sellerService.findOne(id);
     }
 
@@ -55,7 +67,7 @@ public class SellerController {
     }
 
     @GetMapping("/delete")
-    public Result delete(Long[] ids) {
+    public Result delete(String[] ids) {
         try {
             sellerService.deleteByIds(ids);
             return Result.ok("删除成功");

@@ -78,4 +78,15 @@ public class ItemCatController {
         return itemCatService.search(page, rows, itemCat);
     }
 
+    /**
+     * 根据父分类id查询其对应的所有子商品分类
+     * @param parentId 父分类id
+     * @return 子商品分类列表
+     */
+    @GetMapping("/findByParentId")
+    public List<TbItemCat> findByParentId(Long parentId){
+        TbItemCat itemCat = new TbItemCat();
+        itemCat.setParentId(parentId);
+        return itemCatService.findByWhere(itemCat);
+    }
 }

@@ -11,20 +11,31 @@
 
     <!--配置那些资源是不需要就就可以访问的-->
     <http pattern="/login.html" security="none"/>
-    <http pattern="/login_error.html" security="none"/>
-    <!--配置要登录并且要一定的角色权限才能访问 的资源-->
+    <http pattern="/css/**" security="none"/>
+    <http pattern="/img/**" security="none"/>
+    <http pattern="/js/**" security="none"/>
+    <http pattern="/plugins/**" security="none"/>
+
+    <!--配置要登录并且要一定的角色权限才能访问 的资源
+        use-expressions配置为false的话则可以在指定权限的时候不使用表达式-->
     <http use-expressions="false">
         <!--拥有user角色的可以任意访问所有资源-->
         <intercept-url pattern="/**" access="ROLE_USER"/>
         <!--表单登录信息-->
         <!--<form-login>-->
         <form-login always-use-default-target="true" login-page="/login.html" default-target-url=
-                "/index.html" authentication-failure-forward-url="/login_error.html"/>
+                "/admin/index.html" authentication-failure-forward-url="/login.html"/>
 
         <!--禁止跨站请求伪造校验-->
         <csrf disabled="true"></csrf>
+
+        <!--如果使用了iframe等框架，希望跳转也是在框架内跳转的话-->
+        <headers>
+            <frame-options policy="SAMEORIGIN"/>
+        </headers>
         
-        
+        <!--注销标签-->
+        <logout/>
     </http>
     <!--认证管理器-->
     <authentication-manager>

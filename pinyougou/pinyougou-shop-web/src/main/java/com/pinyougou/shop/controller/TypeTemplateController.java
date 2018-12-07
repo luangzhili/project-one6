@@ -1,4 +1,4 @@
-package com.pinyougou.manage.controller;
+package com.pinyougou.shop.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.pinyougou.pojo.TbTypeTemplate;
@@ -8,6 +8,7 @@ import com.pinyougou.vo.Result;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping("/typeTemplate")
 @RestController
@@ -76,6 +77,16 @@ public class TypeTemplateController {
     public PageResult search(@RequestBody  TbTypeTemplate typeTemplate, @RequestParam(value = "page", defaultValue = "1")Integer page,
                                @RequestParam(value = "rows", defaultValue = "10")Integer rows) {
         return typeTemplateService.search(page, rows, typeTemplate);
+    }
+
+    /**
+     * 根据分类模板id查询其对应的规格及其规格的选项
+     * @param id 分类模板id
+     * @return
+     */
+    @GetMapping("/findSpecList")
+    public List<Map> findSpecList(Long id){
+        return  typeTemplateService.findSpecList(id);
     }
 
 }
